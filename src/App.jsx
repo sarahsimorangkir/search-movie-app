@@ -3,20 +3,25 @@ import "./App.css";
 import { getMovieList, searchMovie } from "./api";
 
 const App = () => {
-  const search = (q) => {
-    console.log({ q });
-  };
-  //state untuk menampung popular movies
+
+  //state to hold data for popular movies
   const [popularMovies, setPopularMovies] = useState([]);
 
   useEffect(() => {
     getMovieList().then((result) => {
       setPopularMovies(result);
-      console.log(result)
     });
   }, []);
 
   const imgUrl = process.env.REACT_APP_BASE_IMGURL;
+
+  const search = async (q) => {
+    if(q === ""){
+      return
+    }
+    const query = await searchMovie(q);
+    setPopularMovies(query.results);
+  };
 
   const listOfMovies = () => {
     return popularMovies.map((movie, i) => {
